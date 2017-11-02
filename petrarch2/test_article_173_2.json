@@ -1,0 +1,16 @@
+{
+	"type" : "story",
+	"doc_id" : "nytasiapacific20160622.0002",
+	"head_line" : "Lightning Ridge Journal: An Amateur Undertaking in Australian Mining Town With No Funeral Home",
+	"date_line" : "Tue, 21 Jun 2016 03:52:15 GMT",
+	"sentences" : [
+		{
+			"sentence_id" : 1,
+			"sentence" : "AFP reporter said Bashar Al-Assad agreed to take help from President Obama and his Government.",
+			"parse_sentence" : "(ROOT (S (NP (NNP AFP) (NN reporter)) (VP (VBD said) (SBAR (S (NP (NNP Bashar Al-Assad)) (VP (VBD agreed) (S (VP (TO to) (VP (VB take) (NP (NN help)) (PP (IN from) (NP (NP (NNP President) (NNP Obama)) (CC and) (NP (PRP$ his) (NN Government))))))))))) (. .)))"
+			
+		}
+		
+	],
+	"corref" : ""
+}

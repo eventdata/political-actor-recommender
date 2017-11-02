@@ -1,0 +1,13 @@
+{
+  "type": "story",
+  "doc_id": "nytasiapacific20160621.0001",
+  "head_line": "Lightning Ridge Journal: An Amateur Undertaking in Australian Mining Town With No Funeral Home",
+  "date_line": "Tue, 21 Jun 2016 03:52:15 GMT",
+  "sentences": [
+    {
+      "sentence_id": 1,
+      "sentence": "Russia helps Barack Obama to fight against the rebels.",
+      "parse_sentence": "(ROOT (S (NP (NNP Russia)) (VP (VBZ helps) (S (NP (NNP Barack) (NNP Obama)) (VP (TO to) (VP (VB fight) (PP (IN against) (NP (DT the) (NNS rebels))))))) (. .)))"
+    }
+  ]
+}
