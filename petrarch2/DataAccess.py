@@ -27,8 +27,8 @@ def get_daily_data(date):
     mongoClient = get_mongo_connection()
     database = mongoClient.event_scrape
 
-    start_date = date.replace(hour=0,minute=0,second=0, microsecond=0)
-    end_date = start_date + timedelta(days=1)
+    end_date = date.replace(hour=0,minute=0,second=0, microsecond=0)
+    start_date = end_date - timedelta(days=1)
 
     cursor = database.stories.find({"date_added":{"$gte": start_date, "$lt": end_date}})
     list_ids = []
@@ -50,17 +50,13 @@ def get_daily_data(date):
 
 
 
-window_no = 10
+time_now = datetime.now()
 
-today = datetime.now()
+new_Time = time_now.replace(hour=0,minute=0,second=0, microsecond=0)
 
-dataset = {}
 
-for i in range(1, 10):
-    dataset[window_no] = get_daily_data(today-timedelta(days=i))
-    window_no -= 1
+print time_now
 
-print "Printing size of daily dataset"
+print new_Time - timedelta(days=1)
 
-for day in dataset:
-    print len(dataset[day])
+get_daily_data(datetime.now()-timedelta(days=1))

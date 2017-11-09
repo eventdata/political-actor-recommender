@@ -10,6 +10,7 @@ import os
 
 import time
 import operator
+import pickle
 
 from multiprocessing import Pool
 
@@ -20,7 +21,9 @@ from UnionFind import UnionFind
 from petrarch2 import PETRglobals
 from ActorDictionary import ActorDictionary
 from pymongo import MongoClient
-from datetime import datetime
+from datetime import datetime, timedelta
+
+import schedule
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -46,6 +49,8 @@ coder = EventCoder(petrGlobal={})
 another_coder = EventCoder(petrGlobal=coder.get_PETRGlobals())
 N = input("Number of recommended actors per window = ")
 print N
+
+WINDOW_LENGTH = 10
 
 new_actor_over_time = dict()
 
@@ -103,47 +108,30 @@ if os.path.exists(output_dir) is False:
 
 log_file = open(output_dir+"apart_log.log", "w+")
 
-def get_mongo_connection():
-    MONGO_SERVER_IP="172.29.100.14"
-    MONGO_PORT="3154"
-    MONGO_USER="event_reader"
-    MONGO_PSWD="dml2016"
 
-
-    #password = urllib.quote_plus(MONGO_PSWD)
-    return MongoClient('mongodb://'+MONGO_USER+':' + MONGO_PSWD + '@'+MONGO_SERVER_IP+":"+MONGO_PORT)
-
-def get_daily_data(date):
-    mongoClient = get_mongo_connection()
-    database = mongoClient.event_scrape
 
 
 
 #==========================================================
-def window_processing(file_name):
-    log("Starting a new window")
+def window_processing(map_entry):
+
+    window_no = map_entry[0]
+    list_documents = map_entry[1]
+
+    print "Processing window: ", str(window_no), " with ", str(len(list_documents)) , " articles"
+
     window_start_time = time.clock()
-    print ('reading file: ' + file_name)
-
-
-    input_file = open(file_name)
 
     total_new_actor_list = []
     word_dic = dict()
     window_actor_codes = {}
     window_actor_roles = {}
 
-    for line in input_file:
+    for entry in list_documents:
 
-        print line
-        print '==================='
 
-        if not line.startswith('{'):  # skip the null entries
-            print 'Not a useful line'
-            continue
-        # pp.pprint(another_coder.encode(line))
 
-        dict_event = another_coder.encode(line)
+        dict_event = another_coder.encode(json.dumps(entry))
         if dict_event is None:
             continue
 
@@ -196,7 +184,7 @@ def window_processing(file_name):
         filter_new_actor = set()
 
         for item in new_actor_meta['new_actor']:
-            sentences = json.load(StringIO(line), encoding='utf-8')
+            sentences = entry
 
             count = 0
             for s in sentences['sentences']:
@@ -285,7 +273,7 @@ def window_processing(file_name):
         new_actor['new_actor'] = temp_dict
         new_actor['event_code'] = event_code
         if 'DONALD_TRUMP_DONALD_TRUMP' in temp_dict:
-            print new_actor['doc_id'], file_name
+            print new_actor['doc_id'], str(window_no)
             # sys.exit()
         pprint.pprint(new_actor['new_actor'])
         # print  new_actor
@@ -427,7 +415,7 @@ def window_processing(file_name):
     window_end_time = time.clock()
     log("Processing time for this window: " + str(window_end_time - window_start_time))
 
-    return window_recomended_actors, window_actor_roles
+    return window_recomended_actors, window_actor_roles, window_no
 
 #==========================================================
 
@@ -437,138 +425,171 @@ recommended_roles = []
 
 pool = Pool(4)
 
-window_file_names = []
-for input_file_name in sorted(os.listdir(folder_name)):
+# window_file_names = []
+# for input_file_name in sorted(os.listdir(folder_name)):
+#
+#     log("Starting a new window")
+#     window_start_time = time.clock()
+#     print ('reading file: ' + input_file_name)
+#
+#     if skip != 0:
+#         skip -= 1
+#         print "Skipping"
+#         continue
+#     if num_windows == 0:
+#         break
+#     num_windows -= 1
+#     window_file_names.append(folder_name + input_file_name)
 
-    log("Starting a new window")
-    window_start_time = time.clock()
-    print ('reading file: ' + input_file_name)
+from Queue import Queue
 
-    if skip != 0:
-        skip -= 1
-        print "Skipping"
-        continue
-    if num_windows == 0:
-        break
-    num_windows -= 1
-    window_file_names.append(folder_name + input_file_name)
+window_queue = []
+
+def daily_task():
+
+    if len(window_queue) == 0:
+        bootstrap_system()
+
+    print len(window_queue)
+
+    print "Running Daily Job"
+
+    todays_results = window_processing((10, get_daily_data(datetime.now())))
+
+    save_backup()
+
+    if len(window_queue) == WINDOW_LENGTH:
+        window_queue.pop()
+    window_queue.append(todays_results)
+
+    results = []
+
+    for item in window_queue:
+        results.append(item)
+
+    for result in results:
+        window_recommend_actor = result[0]
+        window_recommend_roles = result[1]
+        window_no = result[2]
+        recommended_roles.append(window_recommend_roles)
+
+        for actor in window_recommend_actor:
+            if actor in new_actor_over_time:
+                new_actor_over_time[actor] += 1
+            else:
+                new_actor_over_time[actor] = 1
 
 
+    for key in new_actor_over_time:
+        recommended_actors.append(key)
 
 
-results = pool.map(window_processing, window_file_names)
+    uf = compress(item_list=recommended_actors)
+    compressed_actor_roles = {}
+    compressed_new_actors = {}
+    for actor_name in recommended_actors:
+        parent_actor = uf.find(actor_name)
 
-
-for result in results:
-    window_recommend_actor = result[0]
-    window_recommend_roles = result[1]
-    recommended_roles.append(window_recommend_roles)
-
-    for actor in window_recommend_actor:
-        if actor in new_actor_over_time:
-            new_actor_over_time[actor] += 1
+        if parent_actor in compressed_new_actors:
+            compressed_new_actors[parent_actor] += new_actor_over_time[actor_name]
         else:
-            new_actor_over_time[actor] = 1
+            compressed_new_actors[parent_actor] = new_actor_over_time[actor_name]
+
+    for actor_name in recommended_actors:
+        for i in range(0, len(recommended_roles)):
+            window_actor_roles = recommended_roles[i]
+            parent = uf.find(actor_name)
+            if parent in compressed_actor_roles:
+                if actor_name not in window_actor_roles:
+                    continue
+                for k in window_actor_roles[actor_name]:
+                    if k in compressed_actor_roles[parent]:
+                        compressed_actor_roles[parent][k] += window_actor_roles[actor_name][k]
+                    else:
+                        compressed_actor_roles[parent][k] = window_actor_roles[actor_name][k]
+            elif actor_name in window_actor_roles:
+                compressed_actor_roles[parent] = window_actor_roles[actor_name]
+
+    end_time = time.clock()
+
+    print "Time Required: ", str(end_time - start_time)
+
+    with open(output_dir+'new_actor_final.txt', 'w+') as outfile:
+        #outfile.write("\nWindow " + str(count) + "\n")
+        json.dump(sorted(compressed_new_actors.items(), key=lambda x: (-x[1], x[0])), outfile)
+        outfile.close()
 
 
-for key in new_actor_over_time:
-    recommended_actors.append(key)
+    with open(output_dir+'new_actor_role.txt', 'w+') as outfile:
+        json.dump(compressed_actor_roles, outfile)
+        outfile.close()
+
+    with open(output_dir+'current_actors.txt', 'w+') as outfile:
+        json.dump(current_actors, outfile)
+        outfile.close()
+
+from DataAccess import get_daily_data
 
 
-uf = compress(item_list=recommended_actors)
-compressed_actor_roles = {}
-compressed_new_actors = {}
-for actor_name in recommended_actors:
-    parent_actor = uf.find(actor_name)
+def load_backup():
 
-    if parent_actor in compressed_new_actors:
-        compressed_new_actors[parent_actor] += new_actor_over_time[actor_name]
-    else:
-        compressed_new_actors[parent_actor] = new_actor_over_time[actor_name]
+    try:
+        window_queue = pickle.load(open(output_dir+"/backup.txt", "r"))
+        return True
+    except:
+        #window_queue = Queue(maxsize=10)
+        return False
 
-for actor_name in recommended_actors:
-    for i in range(0, len(recommended_roles)):
-        window_actor_roles = recommended_roles[i]
-        parent = uf.find(actor_name)
-        if parent in compressed_actor_roles:
-            if actor_name not in window_actor_roles:
-                continue
-            for k in window_actor_roles[actor_name]:
-                if k in compressed_actor_roles[parent]:
-                    compressed_actor_roles[parent][k] += window_actor_roles[actor_name][k]
-                else:
-                    compressed_actor_roles[parent][k] = window_actor_roles[actor_name][k]
-        elif actor_name in window_actor_roles:
-            compressed_actor_roles[parent] = window_actor_roles[actor_name]
-
-end_time = time.clock()
-
-print "Time Required: ", str(end_time - start_time)
-
-with open(output_dir+'new_actor_final.txt', 'w+') as outfile:
-    #outfile.write("\nWindow " + str(count) + "\n")
-    json.dump(sorted(compressed_new_actors.items(), key=lambda x: (-x[1], x[0])), outfile)
-    outfile.close()
-
-
-with open(output_dir+'new_actor_role.txt', 'w+') as outfile:
-    json.dump(compressed_actor_roles, outfile)
-    outfile.close()
-
-with open(output_dir+'current_actors.txt', 'w+') as outfile:
-    json.dump(current_actors, outfile)
-    outfile.close()
+def save_backup():
+    pickle.dump(window_queue, open(output_dir+"/backup.txt", "w+"))
 
 
 
-excluded_actor_file = open("../output/List_Excluded_Actors")
-excluded_actor_list = []
-for line in excluded_actor_file:
-    excluded_actor_list.append(line.strip())
+def bootstrap_system():
 
-count = 0
+    print "No Previous data avilable, bootstraping the system"
 
-extracted_actors = []
+    # res = load_backup()
+    #
+    # if res == True:
+    #     print "Backup Located"
+    #     return
 
-for w in compressed_new_actors.items():
-    if w[0] in excluded_actor_list:
-        count += 1
-        extracted_actors.append(w[0])
-        print w[0]
-print count
+    window_no = 10
 
-role_dict = RoleDictionary()
-simCalculator = FuzzyClusterSimilarity()
-count = 0
-count_partial = 0;
-for actor in extracted_actors:
-    suggested_roles = compressed_actor_roles.get(actor)
-    sorted_list = sorted(suggested_roles.items(), key=lambda x:x[1])[-5:]
-    suggestion_set = set()
+    today = datetime.now()
 
-    actual_roles  = role_dict.roles(actor)
-    for key in actual_roles:
-       suggestion_set = actual_roles[key]
-    for i in range(0, len(sorted_list)):
-        print sorted_list[i]
-        if sorted_list[i][0] in suggestion_set:
-            count += 1
-            break
-    maxRatio = simCalculator.THRESHOLD
-    maxMatched = None
-    for i in range(0, len(sorted_list)):
-        for key in suggestion_set:
-            ratio = simCalculator.measure(key, sorted_list[i][0])
-            if ratio >= maxRatio:
-                maxRatio = ratio
-                maxMatched = sorted_list[i]
-    if maxMatched is not None:
-        count_partial += 1
+    dataset = {}
 
-    print  actual_roles, suggested_roles
+    for i in range(1, 10):
+        dataset[window_no] = get_daily_data(today-timedelta(days=i))
+        window_no -= 1
 
-print count
-print count_partial
+    for day in dataset:
+        print len(dataset[day])
+
+    results = pool.map(window_processing, dataset.items())
+
+    results = sorted(results, key=lambda x:x[2])
+
+    print "Results in sorted order",
+
+    for r in results:
+        window_queue.append(r)
+
+#bootstrap_system()
+schedule.every().day.at("02:10").do(daily_task)
+
+while True:
+    schedule.run_pending()
+    time.sleep(60)
+
+#daily_task()
+
+
+
+
+
 
 
 
