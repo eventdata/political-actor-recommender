@@ -570,7 +570,12 @@ def bootstrap_system():
 
     results = pool.map(window_processing, dataset.items())
 
+    pool.join()
+
+    pool.close()
+
     results = sorted(results, key=lambda x:x[2])
+
 
     print "Results in sorted order",
 
