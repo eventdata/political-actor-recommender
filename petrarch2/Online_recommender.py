@@ -562,9 +562,9 @@ def bootstrap_system():
 
     results = pool.map(window_processing, dataset.items())
 
-    pool.join()
-
-    pool.close()
+    # pool.join()
+    #
+    # pool.close()
 
     results = sorted(results, key=lambda x:x[2])
 
@@ -581,7 +581,7 @@ while True:
     schedule.run_pending()
     time.sleep(60)
 
-#daily_task()
+daily_task()
 
 
 
