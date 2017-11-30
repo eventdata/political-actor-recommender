@@ -41,7 +41,7 @@ pp = pprint.PrettyPrinter(indent=2)
 discard_words_set = set(['THE', 'A', 'AN', 'OF', 'IN', 'AT', 'OUT', '', ' '])
 
 
-from EventCoder import EventCoder
+from EventCoder import EventCoder #used as event coder, wraps petrarch2
 
 start_time = time.clock()
 coder = EventCoder(petrGlobal={})
@@ -50,11 +50,11 @@ another_coder = EventCoder(petrGlobal=coder.get_PETRGlobals())
 N = input("Number of recommended actors per window = ")
 print N
 
-WINDOW_LENGTH = 10
+WINDOW_LENGTH = 10 #how many time window we have
 
-new_actor_over_time = dict()
+new_actor_over_time = dict() #contains new actors over the time windows
 
-
+#unifies entity names based on the similarity value
 def compress(item_list=[], simCalculator=FuzzyClusterSimilarity()):
     uf = UnionFind(item_list)
 
@@ -81,15 +81,7 @@ def compress(item_list=[], simCalculator=FuzzyClusterSimilarity()):
     return uf
 
 
-#input_file = open('/root/Desktop/core_nlp_out_large.txt') #open('/root/test_pet')
-#input_file = open('/root/test_pet2')
 
-from StringIO import StringIO
-
-#folder_name = "../small dataset/"
-folder_name = '/Users/sxs149331/PycharmProjects/APART Dataset/APART Dataset/'
-#folder_name = '/root/Desktop/dataset/'
-#folder_name = '/root/Desktop/test1/'
 
 actor_dict = ActorDictionary()
 

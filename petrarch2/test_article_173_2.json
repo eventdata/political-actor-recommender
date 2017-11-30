@@ -6,8 +6,8 @@
 	"sentences" : [
 		{
 			"sentence_id" : 1,
-			"sentence" : "AFP reporter said Bashar Al-Assad agreed to take help from President Obama and his Government.",
-			"parse_sentence" : "(ROOT (S (NP (NNP AFP) (NN reporter)) (VP (VBD said) (SBAR (S (NP (NNP Bashar Al-Assad)) (VP (VBD agreed) (S (VP (TO to) (VP (VB take) (NP (NN help)) (PP (IN from) (NP (NP (NNP President) (NNP Obama)) (CC and) (NP (PRP$ his) (NN Government))))))))))) (. .)))"
+			"sentence" : "Bashar Al-Assad agreed to take help from President Obama and his Government.",
+			"parse_sentence" : "(ROOT (S (NP (NNP Bashar) (NNP Al-Assad)) (VP (VBD agreed) (S (VP (TO to) (VP (VB take) (NP (NN help)) (PP (IN from) (NP (NP (NNP President) (NNP Obama)) (CC and) (NP (PRP$ his) (NN Government)))))))) (. .)))"
 			
 		}
 		

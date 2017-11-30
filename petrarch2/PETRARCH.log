@@ -1,8 +1,10 @@
-INFO 2017-11-08 17:13:07,440: Running
-INFO 2017-11-08 17:13:07,440: Using Config file: PETR_config.ini
-INFO 2017-11-08 17:13:07,441: Reading CAMEO.2.0.txt
-INFO 2017-11-08 17:13:10,705: Reading Phoenix.agents.txt
+INFO 2017-11-28 16:47:03,638: Running
+INFO 2017-11-28 16:47:03,639: Using Config file: PETR_config.ini
+INFO 2017-11-28 16:47:03,640: Reading CAMEO.2.0.txt
+INFO 2017-11-28 16:47:06,220: Reading Phoenix.agents.txt
 
-WARNING 2017-11-08 17:13:10,732: Codes are required for agents in .agents file ; line skipped
-INFO 2017-11-08 17:13:10,737: Reading Phoenix.discards.txt
-INFO 2017-11-08 17:13:10,741: Reading Phoenix.IssueCoding.txt
+WARNING 2017-11-28 16:47:06,246: Codes are required for agents in .agents file ; line skipped
+INFO 2017-11-28 16:47:06,250: Reading Phoenix.discards.txt
+INFO 2017-11-28 16:47:06,255: Reading Phoenix.IssueCoding.txt
+INFO 2017-11-28 16:47:06,316: ut.EP nytasiapacific20160622.0002_1 text not found
+INFO 2017-11-28 16:47:06,316: ut.EP nytasiapacific20160622.0002_1 text not found
