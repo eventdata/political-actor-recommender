@@ -574,7 +574,7 @@ def bootstrap_system():
     for r in results:
         window_queue.append(r)
 
-#bootstrap_system()
+bootstrap_system()
 schedule.every().day.at("02:50").do(daily_task)
 
 while True:
