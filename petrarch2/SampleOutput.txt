@@ -1,4 +1,4 @@
-DONALD_TRUMP_JR. :  [(u'MED', 458), (u'USAGOVLEG', 486), (u'USA', 1459), (u'USAGOV', 1565), (u'GOV', 2092)]
+DONALD_TRUMP :  [(u'MED', 458), (u'USAGOVLEG', 486), (u'USA', 1459), (u'USAGOV', 1565), (u'GOV', 2092)]
 MELANIA_TRUMP :  [(u'FRA', 248), (u'FRAGOV', 329), (u'USA', 330), (u'USAGOV', 373), (u'GOV', 635)]
 EMMANUEL_MACRON :  [(u'DEUGOV', 135), (u'GOV', 261), (u'USAGOV', 337), (u'FRA', 524), (u'FRAGOV', 753)]
 MITCH_MCCONNELL :  [(u'MED', 59), (u'LEG', 78), (u'GOV', 119), (u'USA', 268), (u'USAGOVLEG', 461)]

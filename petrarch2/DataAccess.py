@@ -30,7 +30,7 @@ def get_daily_data(date):
     end_date = date.replace(hour=0,minute=0,second=0, microsecond=0)
     start_date = end_date - timedelta(days=1)
 
-    cursor = database.stories.find({"date_added":{"$gte": start_date, "$lt": end_date}}).limit(1000)
+    cursor = database.stories.find({"date_added":{"$gte": start_date, "$lt": end_date}})
     list_ids = []
     for entry in cursor:
         list_ids.append(str(entry["_id"]))
