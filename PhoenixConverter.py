@@ -5,7 +5,7 @@ import logging
 import json
 import requests
 import urllib
-
+from datetime import datetime
 
 #from mediameter.cliff import Cliff
 
@@ -204,6 +204,10 @@ class PhoenixConverter:
         phoenixDict["tgt_other_agent"] = None
 
         phoenixDict["date8"] = date8
+        try:
+            phoenixDict["date8_val"] = datetime.strptime(date8, "%Y%m%d")
+        except:
+            phoenixDict["date8_val"] = None
         phoenixDict["year"] = date8[0:4]
         phoenixDict["month"] = date8[4:6]
         phoenixDict["day"] = date8[6:]
@@ -233,6 +237,10 @@ class PhoenixConverter:
                     phoenixDict['geoname'] = geoDict['placeName'] + ' ' + geoDict['stateName']
                     phoenixDict['id'] = additional_info.get("mongo_id","")+"_"+str(s)
                     phoenixDict["date8"] = date8
+                    try:
+                        phoenixDict["date8_val"] = datetime.strptime(date8, "%Y%m%d")
+                    except:
+                        phoenixDict["date8_val"] = None
                     phoenixDict["year"] = date8[0:4]
                     phoenixDict["month"] = date8[4:6]
                     phoenixDict["day"] = date8[6:]
