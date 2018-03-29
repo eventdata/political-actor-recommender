@@ -24,6 +24,10 @@ class EventCoder:
     
     def encode(self, article):
         return petrarch2.gen_cameo_event(article)
+
+    def reload_dict(self):
+        petrarch2.read_dictionaries()
+        print("SUCCESSFULL ON LOADING DICTIONARIES")
     
     def load(self, petrGlobals):
         PETRglobals.VerbDict = petrGlobals['VerbDict']

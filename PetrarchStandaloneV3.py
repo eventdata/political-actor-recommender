@@ -44,9 +44,11 @@ def get_info_from_mongo(id_str):
         return None, None
 
 
+def download_online_dictionary(processing_lock):
+    processing_lock.acquire()
+    url
 
-
-
+count = 100
 
 for msg in consumer:
     #print msg
@@ -54,6 +56,10 @@ for msg in consumer:
         event_dict = coder.encode(msg.value)
 
         # formatted_dict = PETRwriter.pipe_output(event_dict)
+        if count == 0:
+           count = 100
+           coder.reload_dict()
+        count -= 1
 
         db_value = {}
         db_value['corenlp'] = json.loads(msg.value)
