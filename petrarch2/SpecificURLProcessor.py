@@ -25,7 +25,7 @@ nlp = StanfordCoreNLP("http://localhost:9000")
 
 print type(article.text)
 
-output = nlp.annotate(str(article.text), properties={'annotators':'tokenize,ssplit,pos,depparse,parse', "outputFormat": "json"})
+output = nlp.annotate(str(article.text), properties={'annotators':'tokenize,ssplit,pos,depparse,parse', "outputFormat": "json", "timeout": 30000})
 
 print output['sentences'][0].keys()
 

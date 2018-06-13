@@ -11,13 +11,12 @@ from kafka.client import SimpleClient
 from kafka.producer.simple import SimpleProducer
 
 from PetrarchFormatter import PetrarchFormatter
-from multiprocessing import Lock
-import urllib
+
 
 MONGO_PORT="3154"
 MONGO_USER="event_reader"
 MONGO_PSWD="dml2016"
-MONGO_SERVER_IP="172.29.100.8"
+MONGO_SERVER_IP="172.29.100.22"
 MONGO_PORT="3154"
 
 MONGO_COLLECTION = "processed_stories"
@@ -42,10 +41,6 @@ def get_info_from_mongo(id_str):
         return article['source'], article['url']
     else:
         return None, None
-
-
-
-
 
 
 for msg in consumer:

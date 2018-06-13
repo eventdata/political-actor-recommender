@@ -1,10 +1,10 @@
-INFO 2017-12-08 19:23:43,059: Running
-INFO 2017-12-08 19:23:43,060: Using Config file: PETR_config.ini
-INFO 2017-12-08 19:23:43,061: Reading CAMEO.2.0.txt
-INFO 2017-12-08 19:23:46,404: Reading Phoenix.agents.txt
+INFO 2018-04-19 18:01:44,185: Running
+INFO 2018-04-19 18:01:44,185: Using Config file: PETR_config.ini
+INFO 2018-04-19 18:01:44,189: Reading CAMEO.2.0.txt
+INFO 2018-04-19 18:01:47,098: Reading Phoenix.agents.txt
 
-WARNING 2017-12-08 19:23:46,436: Codes are required for agents in .agents file ; line skipped
-INFO 2017-12-08 19:23:46,442: Reading Phoenix.discards.txt
-INFO 2017-12-08 19:23:46,447: Reading Phoenix.IssueCoding.txt
-INFO 2017-12-08 19:24:10,254: ut.EP DUMMY_ID_0 text not found
-INFO 2017-12-08 19:24:10,254: ut.EP DUMMY_ID_0 text not found
+WARNING 2018-04-19 18:01:47,208: Codes are required for agents in .agents file ; line skipped
+INFO 2018-04-19 18:01:47,213: Reading Phoenix.discards.txt
+INFO 2018-04-19 18:01:47,218: Reading Phoenix.IssueCoding.txt
+INFO 2018-04-19 18:01:47,403: ut.EP DUMMY_ID_0 text not found
+INFO 2018-04-19 18:01:47,403: ut.EP DUMMY_ID_0 text not found

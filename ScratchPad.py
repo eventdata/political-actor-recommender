@@ -1,11 +1,11 @@
-import requests
-import shutil
+from petrarch2.EventCoder import EventCoder
 
-params = {"secret-key": "mySecretKey"}
-url = "http://104.198.76.143:8080/dictionary/downloadDictionary"
-local_filename = url.split('/')[-1] + ".txt"
-r = requests.get(url, headers = params, stream=True)
-with open(local_filename, 'wb+') as f:
-	shutil.copyfileobj(r.raw, f)
-print(str(local_filename))
+import json
 
+coder = EventCoder()
+
+article = json.dumps(json.load(open("test_article_173_2.json", "r")))
+
+events = coder.encode(article)
+
+print events
