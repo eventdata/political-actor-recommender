@@ -17,7 +17,7 @@ import urllib
 MONGO_PORT="3154"
 MONGO_USER="event_reader"
 MONGO_PSWD="dml2016"
-MONGO_SERVER_IP="172.29.100.22"
+MONGO_SERVER_IP="172.29.100.16"
 MONGO_PORT="3154"
 
 MONGO_COLLECTION = "processed_stories"
@@ -27,6 +27,7 @@ client = MongoClient('mongodb://'+MONGO_USER+':' + password + '@'+MONGO_SERVER_I
 db = client.event_scrape
 
 consumer = KafkaConsumer('petrarch',bootstrap_servers='172.29.100.6:9092')
+producer = KafkaProducer(bootstarp_servers='172.29.100.6:9092')
 
 formatter = PhoenixConverter(geo_ip="149.165.168.205", geo_port="8080")
 
@@ -53,6 +54,7 @@ count = 100
 for msg in consumer:
     #print msg
     try:
+        producer.send("petrarch_ud", msg.value)
         event_dict = coder.encode(msg.value)
 
         # formatted_dict = PETRwriter.pipe_output(event_dict)

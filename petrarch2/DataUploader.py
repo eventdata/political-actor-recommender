@@ -28,9 +28,9 @@ for (actor_name, window_count) in new_actor_list:
     print actor_name, role_list
 
 
-    #res = data_uploader.actorUpload(actor_name, [], role_list )
+    res = data_uploader.actorUpload(actor_name, [], role_list )
 
-    #print res
+    print res
 
 
 
