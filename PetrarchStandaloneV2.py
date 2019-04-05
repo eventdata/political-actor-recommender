@@ -16,7 +16,7 @@ from PetrarchFormatter import PetrarchFormatter
 MONGO_PORT="3154"
 MONGO_USER="event_reader"
 MONGO_PSWD="dml2016"
-MONGO_SERVER_IP="172.29.100.16"
+MONGO_SERVER_IP="172.29.100.22"
 MONGO_PORT="3154"
 
 MONGO_COLLECTION = "processed_stories"

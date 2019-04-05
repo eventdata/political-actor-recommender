@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 from pymongo import MongoClient
 
 def get_mongo_connection():
-    MONGO_SERVER_IP="172.29.100.16"
+    MONGO_SERVER_IP="172.29.100.22"
     MONGO_PORT="3154"
     MONGO_USER="event_reader"
     MONGO_PSWD="dml2016"
