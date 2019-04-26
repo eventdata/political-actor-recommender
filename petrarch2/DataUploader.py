@@ -15,7 +15,7 @@ data_uploader = ActorUpdate()
 
 for (actor_name, window_count) in new_actor_list:
 
-    if window_count < :
+    if window_count < 4:
         break
 
     roles = new_actors_role[actor_name]

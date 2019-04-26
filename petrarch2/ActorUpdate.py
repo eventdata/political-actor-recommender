@@ -2,12 +2,12 @@ import requests
 import ast
 import json
 import pprint
-from DataAccess import get_mongo_connection
+#from DataAccess import get_mongo_connection
 
 class ActorUpdate:
 
     def __init__(self):
-        self.url = "http://104.198.76.143:8080/dictionary/upload"
+        self.url = "http://149.165.157.42:5000/upload"
         self.headers = {"secret-key": "mySecretKey", "Content-Type": "application/json"}
 
     def actorUpload(self, actorName, synonyms, roles):
@@ -19,11 +19,11 @@ class ActorUpdate:
 
         r = requests.post(self.url, data=json.dumps(actorDictionary), headers=self.headers)
         if r.status_code == 200:
-            conn = get_mongo_connection()
-            db = conn.event_scrape
-            db.uploaded_actors.insert(actorDictionary)
-            conn.close()
-
+            # conn = get_mongo_connection()
+            # db = conn.event_scrape
+            # db.uploaded_actors.insert(actorDictionary)
+            # conn.close()
+            print "Success"
         return r
 
 au = ActorUpdate()
