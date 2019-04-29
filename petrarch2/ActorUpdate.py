@@ -7,8 +7,8 @@ import pprint
 class ActorUpdate:
 
     def __init__(self):
-        self.url = "http://149.165.157.42:5000/upload"
-        self.headers = {"secret-key": "mySecretKey", "Content-Type": "application/json"}
+        self.url = "http://149.165.157.42:3000/upload"
+        #.headers = {"secret-key": "mySecretKey", "Content-Type": "application/json"}
 
     def actorUpload(self, actorName, synonyms, roles):
         actorDictionary = dict()
@@ -26,6 +26,7 @@ class ActorUpdate:
             print "Success"
         return r
 
-au = ActorUpdate()
-roles = ["DEUGOV", "GOV", "USAGOV", "FRA", "FRAGOV"]
-print au.actorUpload("EMMANUEL_MACRON", roles, [])
+
+# au = ActorUpdate()
+# roles = ["DEUGOV", "GOV", "USAGOV", "FRA", "FRAGOV"]
+# print au.actorUpload("EMMANUEL_MACRON", roles, [])
