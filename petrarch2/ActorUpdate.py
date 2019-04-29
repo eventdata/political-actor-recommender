@@ -17,7 +17,7 @@ class ActorUpdate:
         actorDictionary[actorName]["synonyms"] = synonyms
 
 
-        r = requests.post(self.url, data=json.dumps(actorDictionary), headers=self.headers)
+        r = requests.post(self.url, data=json.dumps(actorDictionary))
         if r.status_code == 200:
             # conn = get_mongo_connection()
             # db = conn.event_scrape
