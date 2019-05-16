@@ -552,9 +552,13 @@ def bootstrap_system():
     today = datetime.now()
 
     dataset = {}
-
+    shift = 1
     for i in range(1, 10):
         dataset[window_no] = get_daily_data(today-timedelta(days=i))
+        while len(dataset[window_no]) < 1000:
+            dataset[window_no] = get_daily_data(today - timedelta(days=i+shift))
+            shift += 1
+
         window_no -= 1
 
     for day in dataset:
